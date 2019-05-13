@@ -1,0 +1,23 @@
+version: '3.0'
+services:
+  app:
+    image: python:3.7.3-stretch
+    command: 'python -m django'
+    working_dir: /app
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - PYTHONPATH=/app/django
+    links:
+      - db
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: docker
+      POSTGRES_PASSWORD: docker
+      POSTGRES_DB: docker
