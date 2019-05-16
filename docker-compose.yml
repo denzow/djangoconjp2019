@@ -2,21 +2,24 @@ version: '3.0'
 services:
   app:
     image: python:3.7.3-stretch
-    command: 'python -m django'
+    entrypoint: '/app/docker/app/entrypoint.sh'
+    command: 'python manage.py runserver 0.0.0.0:8000'
     working_dir: /app
     volumes:
       - .:/app
     ports:
-      - "3000:3000"
+      - "8000:8000"
     environment:
       - PYTHONUNBUFFERED=1
-      - PYTHONPATH=/app/django
+      - PYTHONPATH=/app/django-stable-2.2.x
     links:
       - db
 
   db:
     image: postgres
     restart: always
+    volumes:
+      - ./docker/db/postgresql.conf:/var/lib/postgresql/data/postgresql.conf
     environment:
       POSTGRES_USER: docker
       POSTGRES_PASSWORD: docker
